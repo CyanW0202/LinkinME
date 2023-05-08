@@ -77,18 +77,15 @@ def authorize():
     LI_PROFILE_API_ENDPOINT = 'https://api.linkedin.com/v2/me'
     r = requests.get(LI_PROFILE_API_ENDPOINT, headers={'Authorization': 'Bearer ' +access_token2})
     print(r.json())
-    access_token1 = access_token2
+    return access_token2
 
-def getLinkedInInfo():
+def getLinkedInInfo(tok):
     import json
     LI_PROFILE_API_ENDPOINT = 'https://api.linkedin.com/v2/me'
-    r = requests.get(LI_PROFILE_API_ENDPOINT, headers={'Authorization': 'Bearer ' + access_token1})
-    t = r.json()
-    print(t.get('status'))
-    #first_name = t['firstName'][0]['localized'][0]['en_US']
-    #print(first_name)
-    #return first_name
-
+    r = requests.get(LI_PROFILE_API_ENDPOINT, headers={'Authorization': 'Bearer ' + tok})
+    dic_t = {}
+    t =json.loads(r.text.encode('utf8'))
+    print(t['firstName']['localized']['en_US'])
 
 
 #Linkedin Credentials:
@@ -117,8 +114,7 @@ promptt = {"summaries this person's experiences in engineering? please list them
            "What characteristics or experience in the profile support this analysis respectively? list them in bullet points."}
 
 # main
-authorize()
-getLinkedInInfo()
+getLinkedInInfo(authorize())
 
 while chat:
     # test the LinkedIn API
